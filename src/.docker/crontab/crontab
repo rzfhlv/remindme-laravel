@@ -1,0 +1,1 @@
+* * * * * /usr/local/bin/php /var/www/remindme/artisan schedule:run >> /var/www/remindme/storage/logs/cron.log 2>&1
