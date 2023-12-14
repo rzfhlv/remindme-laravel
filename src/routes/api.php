@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\ReminderController;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -23,8 +24,8 @@ Route::get('/unauthorized', function (Request $request) {
     return response()->json([
         'ok' => false,
         'err' => 'ERR_INVALID_CRED',
-        'message' => 'unauthorized',
-    ], 401);
+        'msg' => 'invalid credential',
+    ], Response::HTTP_UNAUTHORIZED);
 })->name('unauthorized');
 
 Route::middleware(['auth:sanctum', 'ability:access-api'])->group(function () {
@@ -50,7 +51,8 @@ Route::middleware(['auth:sanctum', 'ability:issue-access-token'])->group(functio
 
 Route::any('{path}', function () {
     return response()->json(array(
-        'error' => true,
-        'message' => 'Invalid API',
+        'ok' => false,
+        'err' => 'ERR_INVALID_API',
+        'msg' => 'invalid api',
     ), 404);
 })->where('path', '.*');
