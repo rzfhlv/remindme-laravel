@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\ReminderController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -31,6 +32,16 @@ Route::middleware(['auth:sanctum', 'ability:access-api'])->group(function () {
         return $request->user();
     });
     Route::post('/logout', [AuthController::class, 'logout']);
+
+    Route::prefix('/reminders')->group(function () {
+        Route::controller(ReminderController::class)->group(function () {
+            Route::get('/', 'all');
+            Route::post('/', 'create');
+            Route::get('/{id}', 'get');
+            Route::put('/{id}', 'update');
+            Route::delete('/{id}', 'delete');
+        });
+    });
 });
 
 Route::middleware(['auth:sanctum', 'ability:issue-access-token'])->group(function () {
