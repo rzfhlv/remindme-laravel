@@ -6,6 +6,7 @@ use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Throwable;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
 class Handler extends ExceptionHandler
 {
@@ -26,12 +27,18 @@ class Handler extends ExceptionHandler
     public function register(): void
     {
         $this->renderable(function (Exception $e, Request $request) {
-            if ($e instanceof \Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException || $e instanceof \Illuminate\Auth\AuthenticationException) {
+            if ($e instanceof \Illuminate\Auth\AuthenticationException && $request->path() == 'api/session' && $request->method() == 'PUT') {
+                return response()->json([
+                    'ok' => false,
+                    'err' => 'ERR_INVALID_REFRESH_TOKEN',
+                    'msg' => 'invalid refresh token',
+                ], Response::HTTP_FORBIDDEN);
+            } else if ($e instanceof \Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException || $e instanceof \Illuminate\Auth\AuthenticationException) {
                 return response()->json([
                     'ok' => false,
                     'err' => 'ERR_INVALID_CRED',
-                    'message' => 'unauthorized',
-                ], 401);
+                    'msg' => 'invalid credential',
+                ], Response::HTTP_UNAUTHORIZED);
             }
         });
     }
