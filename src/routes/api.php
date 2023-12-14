@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\AuthController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -14,6 +15,31 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+Route::post('/register', [AuthController::class, 'register']);
+Route::post('/session', [AuthController::class, 'login']);
+
+Route::get('/unauthorized', function (Request $request) {
+    return response()->json([
+        'ok' => false,
+        'err' => 'ERR_INVALID_CRED',
+        'message' => 'unauthorized',
+    ], 401);
+})->name('unauthorized');
+
+Route::middleware(['auth:sanctum', 'ability:access-api'])->group(function () {
+    Route::get('/user', function (Request $request) {
+        return $request->user();
+    });
+    Route::post('/logout', [AuthController::class, 'logout']);
 });
+
+Route::middleware(['auth:sanctum', 'ability:issue-access-token'])->group(function () {
+    Route::put('/session', [AuthController::class, 'refresh']);
+});
+
+Route::any('{path}', function () {
+    return response()->json(array(
+        'error' => true,
+        'message' => 'Invalid API',
+    ), 404);
+})->where('path', '.*');
