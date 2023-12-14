@@ -80,4 +80,14 @@ return [
         'verify_csrf_token' => App\Http\Middleware\VerifyCsrfToken::class,
     ],
 
+    /**
+     * Expirations Seconds
+     */
+    'access_exp' => env('SANCTUM_ACCESS_EXPIRATION', 20),
+
+    /**
+     * Expirations Days
+     */
+    'refresh_exp' => env('SANCTUM_REFRESH_EXPIRATION', 7),
+
 ];
