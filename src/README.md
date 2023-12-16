@@ -30,7 +30,7 @@
 - For Running the application ```$ make up```
 - For first time init application (and your whole setup done) ```$ make install```
 - This project ready to use
-- If you using docker you don't need to setup anymore your queue under the hoood handle by docker container with supervisor, you just go to check the API
+- If you using docker you don't need to setup anymore your queue and scheduler under the hoood handle by docker container with supervisor, you just go to check the API
+- If your scheduler not running under docker you check reminder with ```$ make reminder```
 - If your supervisor got problem you can running the queue job with ```$ make queue```
 - For stop the application ```$ make down```
-

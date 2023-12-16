@@ -13,6 +13,9 @@ tinker:
 compose:
 	docker-compose exec php composer install
 
+reminder:
+	docker-compose exec php php artisan app:send-reminders
+
 queue:
 	docker-compose exec php php artisan queue:work --tries=3
 
