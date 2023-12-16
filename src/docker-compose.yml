@@ -7,27 +7,22 @@ services:
       context: .
       args:
         - USER_ID=1000
-        - USER=remindme
+        - USER=src
       dockerfile: Dockerfile
     volumes:
-      - ./:/var/www/remindme
+      - ./:/var/www/src
       - .docker/supervisor/remindme-worker.conf:/etc/supervisor/conf.d/worker.conf
-      - .docker/crontab/crontab:/var/spool/cron/crontabs/root
     restart: always
     networks:
       - remindme
-    command:
-      - /bin/sh
-      - -c
-      - supervisord -c /etc/supervisor/conf.d/worker.conf
-      - supervisorctl start all
+    command: ["/usr/bin/supervisord", "-n", "-c", "/etc/supervisor/conf.d/worker.conf"]
 
   web:
     container_name: "remindme-nginx"
     image: nginx:1.24
-    working_dir: /var/www/remindme
+    working_dir: /var/www/src
     volumes:
-      - ./:/var/www/remindme:delegated
+      - ./:/var/www/src:delegated
       - .docker/nginx/default.conf:/etc/nginx/conf.d/default.conf:delegated
     restart: always
     ports:
