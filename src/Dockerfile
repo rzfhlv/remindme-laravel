@@ -3,7 +3,7 @@ FROM php:8.2-fpm-alpine
 ARG USER
 ARG USER_ID
 
-WORKDIR /var/www/remindme
+WORKDIR /var/www/src
 
 RUN apk --update add \
         libzip-dev \
@@ -30,7 +30,7 @@ RUN mkdir -p /home/$USER/.composer && \
 
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-COPY . /var/www/remindme
+COPY . /var/www/src
 
 RUN composer install \
     --ignore-platform-reqs \
@@ -40,15 +40,7 @@ RUN composer install \
     --prefer-dist \
     --quiet
 
-RUN chown -R $USER:www-data /var/www/remindme && \
-    chmod -R 775 /var/www/remindme
-
-COPY .docker/crontab/crontab /var/spool/cron/crontabs/root
-COPY .docker/crontab/entrypoint.bash /usr/sbin
-RUN chmod a+x /usr/sbin/entrypoint.bash
-
-RUN touch /var/www/remindme/storage/logs/cron.log
-
-ENTRYPOINT /usr/sbin/entrypoint.bash
+RUN chown -R $USER:www-data /var/www/src && \
+    chmod -R 775 /var/www/src/storage /var/www/src/bootstrap/cache
 
 USER $USER

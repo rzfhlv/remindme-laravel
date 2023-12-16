@@ -18,6 +18,7 @@ return new class extends Migration
             $table->timestamp('remind_at')->nullable();
             $table->timestamp('event_at')->nullable();
             $table->unsignedBigInteger('created_by');
+            $table->boolean('is_remind')->default(false);
             $table->timestamps();
 
             $table->foreign('created_by')->references('id')->on('users');
