@@ -54,7 +54,7 @@ class ReminderController extends Controller
         try {
             $limit = $request->query('limit', 10);
 
-            $reminders = Reminder::orderBy('remind_at', 'desc')->take($limit)->get();
+            $reminders = Reminder::where('created_by', $request->user()->id)->orderBy('remind_at', 'desc')->take($limit)->get();
             $result = collect(["reminders" => $reminders, "limit" => $limit]);
 
             return new ReminderCollection($result);

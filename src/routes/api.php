@@ -38,9 +38,12 @@ Route::middleware(['auth:sanctum', 'ability:access-api'])->group(function () {
         Route::controller(ReminderController::class)->group(function () {
             Route::get('/', 'all');
             Route::post('/', 'create');
-            Route::get('/{id}', 'get');
-            Route::put('/{id}', 'update');
-            Route::delete('/{id}', 'delete');
+
+            Route::middleware(['ensure.user'])->group(function () {
+                Route::get('/{id}', 'get');
+                Route::put('/{id}', 'update');
+                Route::delete('/{id}', 'delete');
+            });
         });
     });
 });
