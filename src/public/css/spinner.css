@@ -1,0 +1,35 @@
+.vertical-center {
+    margin: 0;
+    position: absolute;
+    top: 25%;
+    left: 50%;
+    animation: rotation 3s infinite linear;
+}
+
+.bg-loader {
+    height: 6rem;
+    width: 6rem;
+    /* background: rgba(206, 203, 203, 0.9); */
+    /* border-radius: 50%; */
+}
+
+.loader-remindme {
+    display: block;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    background: rgba(0,0,0,0.75);
+    z-index: 10000;
+}
+
+@keyframes rotation {
+    from {
+        transform: rotateY(0deg);
+    }
+    to {
+        transform: rotateY(360deg);
+    }
+}

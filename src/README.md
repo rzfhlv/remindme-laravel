@@ -29,7 +29,11 @@
 - Copy env file ```$ cp .env.example .env```
 - For Running the application ```$ make up```
 - For first time init application (and your whole setup done) ```$ make install```
+- After make install this app have two users email=alice@mail.com password=123456 and email=bob@mail.com password=123456
 - This project ready to use
+- Postman collection and env in remindme-laravel/src/docs/postman
+- In env file has WEB_DOCKER_PORT for port to expose, you can change it
+- Access localhost:1515 for the interface
 - If you using docker you don't need to setup anymore your queue and scheduler under the hoood handle by docker container with supervisor, you just go to check the API
 - If your scheduler not running under docker you check reminder with ```$ make reminder```
 - If your supervisor got problem you can running the queue job with ```$ make queue```
