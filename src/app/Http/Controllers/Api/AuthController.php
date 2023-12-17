@@ -2,14 +2,15 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
-use App\Models\User;
-use Illuminate\Http\Request;
-use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Validator;
-use App\Http\Resources\AuthResource;
 use App\Http\Resources\AuthRefreshResource;
+use Illuminate\Support\Facades\Validator;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Hash;
+use App\Http\Resources\AuthResource;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Http\Response;
+use Illuminate\Http\Request;
+use App\Models\User;
 use Carbon\Carbon;
 
 class AuthController extends Controller
@@ -36,7 +37,7 @@ class AuthController extends Controller
                 'email' => $request->email,
                 'password' => Hash::make($request->password),
             ]);
-    
+
             $now = Carbon::now();
             $token = $user->createToken('access_token', ['access-api'], $now->addSeconds(config('sanctum.access_exp')))->plainTextToken;
             $refresh = $user->createToken('refresh_token', ['issue-access-token'], $now->addDays(config('sanctum.refresh_exp')))->plainTextToken;
@@ -44,6 +45,7 @@ class AuthController extends Controller
     
             return new AuthResource($result);
         } catch (\Throwable $th) {
+            Log::error($th->getMessage());
             return response()->json([
                 'ok' => false,
                 'err' => self::ERR_INTERNAL_SERVER,
@@ -78,7 +80,7 @@ class AuthController extends Controller
                     'msg' => self::MSG_INVALID_CRED,
                 ], Response::HTTP_UNAUTHORIZED);
             }
-    
+
             $now = Carbon::now();
             $token = $user->createToken('access_token', ['access-api'], $now->addSeconds(config('sanctum.access_exp')))->plainTextToken;
             $refresh = $user->createToken('refresh_token', ['issue-access-token'], $now->addDays(config('sanctum.refresh_exp')))->plainTextToken;
@@ -86,6 +88,7 @@ class AuthController extends Controller
     
             return new AuthResource($result);
         } catch (\Throwable $th) {
+            Log::error($th->getMessage());
             return response()->json([
                 'ok' => false,
                 'err' => self::ERR_INTERNAL_SERVER,
@@ -103,6 +106,7 @@ class AuthController extends Controller
 
             return new AuthRefreshResource($result);
         } catch (\Throwable $th) {
+            Log::error($th->getMessage());
             return response()->json([
                 'ok' => false,
                 'err' => self::ERR_INTERNAL_SERVER,
@@ -116,11 +120,12 @@ class AuthController extends Controller
     {
         try {
             $request->user()->tokens()->delete();
-            
+
             return response()->json([
                 'ok' => true,
             ]);
         } catch (\Throwable $th) {
+            Log::error($th->getMessage());
             return response()->json([
                 'ok' => false,
                 'err' => self::ERR_INTERNAL_SERVER,

@@ -33,12 +33,6 @@ class Handler extends ExceptionHandler
                     'err' => 'ERR_INVALID_REFRESH_TOKEN',
                     'msg' => 'invalid refresh token',
                 ], Response::HTTP_FORBIDDEN);
-            } else if ($e instanceof \Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException || $e instanceof \Illuminate\Auth\AuthenticationException) {
-                return response()->json([
-                    'ok' => false,
-                    'err' => 'ERR_INVALID_CRED',
-                    'msg' => 'invalid credential',
-                ], Response::HTTP_UNAUTHORIZED);
             }
         });
     }

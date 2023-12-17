@@ -10,6 +10,7 @@ use App\Http\Resources\ReminderResource;
 use App\Http\Resources\Reminder as ReminderCollection;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Support\Facades\Log;
 
 class ReminderController extends Controller
 {
@@ -41,6 +42,7 @@ class ReminderController extends Controller
     
             return new ReminderResource($reminder);
         } catch (\Throwable $th) {
+            Log::error($th->getMessage());
             return response()->json([
                 'ok' => false,
                 'err' => self::ERR_INTERNAL_SERVER,
@@ -59,6 +61,7 @@ class ReminderController extends Controller
 
             return new ReminderCollection($result);
         } catch (\Throwable $th) {
+            Log::error($th->getMessage());
             return response()->json([
                 'ok' => false,
                 'err' => self::ERR_INTERNAL_SERVER,
@@ -74,6 +77,7 @@ class ReminderController extends Controller
 
             return new ReminderResource($reminder);
         } catch (\Throwable $th) {
+            Log::error($th->getMessage());
             $err = self::ERR_INTERNAL_SERVER;
             $msg = self::MSG_INTERNAL_SERVER;
             $code = Response::HTTP_INTERNAL_SERVER_ERROR;
@@ -101,6 +105,7 @@ class ReminderController extends Controller
             
             return new ReminderResource($reminder);
         } catch (\Throwable $th) {
+            Log::error($th->getMessage());
             $err = self::ERR_INTERNAL_SERVER;
             $msg = self::MSG_INTERNAL_SERVER;
             $code = Response::HTTP_INTERNAL_SERVER_ERROR;
@@ -129,6 +134,7 @@ class ReminderController extends Controller
                 'ok' => true,
             ]);
         } catch (\Throwable $th) {
+            Log::error($th->getMessage());
             $err = self::ERR_INTERNAL_SERVER;
             $msg = self::MSG_INTERNAL_SERVER;
             $code = Response::HTTP_INTERNAL_SERVER_ERROR;
